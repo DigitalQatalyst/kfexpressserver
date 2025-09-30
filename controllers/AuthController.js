@@ -33,7 +33,7 @@ const getToken = async (req, res) => {
       maxAge: response.data.expires_in * 1000,
     }).status(200).json({
       message: "Token fetched successfully",
-      data: response.data,
+      tokenresponse: response.data,
     });
 
     
