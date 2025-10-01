@@ -91,7 +91,7 @@ const {
   // Add flow_secret to the body (if required by the flow)
   data.flow_secret = FLOW_SECRET;
 
-  console.log('Sending data to Power Automate:', data);
+//   console.log('Sending data to Power Automate:', data);
 
   try {
     // get accesstoken from the 

@@ -77,7 +77,7 @@ const getAccountProfile = async(req,res)=>{
     res.status(200).json(response.data);
 
     const contact = response?.data?.value[0]?._primarycontactid_value;
-    console.log('contact', contact);
+    // console.log('contact', contact);
 
     
 
@@ -115,7 +115,7 @@ const getContactInformation = async(req,res)=>{
           { headers }
         );
     
-        console.log('contact response', response.data);
+        // console.log('contact response', response.data);
     
         // Return the response data
         res.status(200).json(response.data);
