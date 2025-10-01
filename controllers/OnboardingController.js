@@ -1,74 +1,87 @@
-const flowURL =
-  "https://3b095fb55afdedef9492cc6f8add41.4e.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/96e00b17f82a4c26a3702e3d362688e0/triggers/manual/paths/invoke?api-version=1";
-const flowSecret = "firmonboarding123";
-const expectedApiKey = "firmonboarding123";
+const express = require('express');
+const axios = require('axios');
 
-const axios = require("axios");
-
+// Power Automate flow endpoint
 const FLOW_URL = 'https://3b095fb55afdedef9492cc6f8add41.4e.environment.api.powerplatform.com/powerautomate/automations/direct/workflows/96e00b17f82a4c26a3702e3d362688e0/triggers/manual/paths/invoke?api-version=1';
 
-// API key (secret) - store this securely, e.g., in environment variables (process.env.FLOW_SECRET)
-const FLOW_SECRET = 'firmonboarding123';
+// Azure AD configuration (replace with your values)
+const AZURE_AD = {
+  tenantId: process.env.tenant_id, // e.g., '12345678-1234-1234-1234-1234567890ab'
+  clientId: process.env.client_id,
+   // e.g., '87654321-4321-4321-4321-0987654321ba'
+  clientSecret: process.env.client_secret, // e.g., 'your-secret-value'
+  scope: 'https://service.flow.microsoft.com//.default',
+};
 
-const onBoarding = async (req, res) => {
-  const data = req.body; // Expect JSON like your example: { "CompanyName": "...", ... }
+// Flow secret (if still required by the flow)
+const FLOW_SECRET = process.env.flow_secret;
 
-  if (!data || Object.keys(data).length === 0) {
-    return res
-      .status(400)
-      .json({ error: "Invalid or empty JSON data provided" });
-  }
+// Function to get Azure AD access token
+async function getAccessToken() {
+  const tokenUrl = `https://login.microsoftonline.com/${AZURE_AD.tenantId}/oauth2/v2.0/token`;
+  const params = new URLSearchParams({
+    grant_type: 'client_credentials',
+    client_id: AZURE_AD.clientId,
+    client_secret: AZURE_AD.clientSecret,
+    scope: AZURE_AD.scope,
+  });
 
   try {
-    const response = await axios.post(FLOW_URL, {
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": FLOW_SECRET.toLowerCase(), // Lowercased as per your flow condition
-      },
-      body: JSON.stringify(data),
+    const response = await axios.post(tokenUrl, params, {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
-
-    if (response.ok) {
-      const result = await response.json(); // Optional: Parse response if your flow returns data
-      res
-        .status(200)
-        .json({
-          message: "Data successfully sent to Power Automate flow",
-          result,
-        });
-    } else {
-      res
-        .status(response.status)
-        .json({ error: `Failed to send data: ${response.statusText}` });
-    }
+    console.log("token response",response.data)
+    return response.data.access_token;
   } catch (error) {
-    // console.error("Error:", error);
-    res.status(500).json({ error: "Server error while sending data to flow" ,error});
+    throw new Error('Failed to obtain access token: ' + (error.response?.data?.error_description || error.message));
+  }
+}
+
+const onBoarding = async (req, res) => {
+  const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
+  
+//   console.log("data",data)
+//   console.log("my token",data.token)
+//   return
+
+  // Validate input
+  if (!data) {
+    return res.status(400).json({ error: 'Invalid or empty JSON data provided' });
   }
 
-  // Add flow_secret to the request body
-  // data.flow_secret = flowSecret;
+  // Add flow_secret to the body (if required by the flow)
+  data.flow_secret = FLOW_SECRET;
 
-  // try {
-  //   const response = await axios.post(flowURL, data, {
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'Authorization': `Bearer ${flowSecret}`
-  //     },
-  //   });
-  //   console.log("api onbo response",response)
+  console.log('Sending data to Power Automate:', data);
 
-  //   // Handle successful response
-  //   if (response.status === 201) {
-  //     res.status(201).send('Data successfully sent to Power Automate');
-  //   } else {
-  //     res.status(400).send('Error occurred while submitting data');
-  //   }
-  // } catch (error) {
-  //   // Handle error response
-  //   console.log("error",error)
-  //   res.status(500).json({error:'Internal Server Error',error});
-  // }
+  try {
+    // get accesstoken from the 
+    // Get OAuth access token
+    
+    const accessToken = await getAccessToken();
+
+    // Send request to Power Automate
+    const response = await axios.post(FLOW_URL, data, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+        // Include x-api-key if the flow still checks it
+        'x-api-key': FLOW_SECRET.toLowerCase(),
+      },
+    });
+
+    // Handle successful response
+    res.status(200).json({
+      message: 'Data successfully sent to Power Automate flow',
+      result: response.data,
+    });
+  } catch (error) {
+    console.error('Error:', error.response ? error.response.data : error.message);
+    res.status(error.response?.status || 500).json({
+      error: 'Failed to send data to Power Automate flow',
+      details: error.response ? error.response.data : error.message,
+    });
+  }
 };
 
 module.exports = {
