@@ -17,4 +17,9 @@ app.get('/', (req: Request, res: Response) => {
 app.use('/api/v1/auth', authRoute);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
+module.exports = app;
