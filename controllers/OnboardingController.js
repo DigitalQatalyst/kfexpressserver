@@ -38,7 +38,46 @@ async function getAccessToken() {
 }
 
 const onBoarding = async (req, res) => {
-  const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
+//   const data = req.body; // Expect JSON like: { "CompanyName": "...", ... }
+
+const {
+    CompanyName, Industry, CompanyStage, ContactName, Email, Phone, InitialCapitalUSD, FundingNeedsUSD, 
+    BusinessRequirements, BusinessNeeds, EmployeeCount, Founders, FoundingYear, Address, City, Country, 
+    Website, BusinessPitch, ProblemStatement, RegistrationNumber, EstablishmentDate, BusinessSize
+  } = req.body; // Expect these fields to be passed in the body
+
+  // Validate input
+  if (!Email || !CompanyName || !Industry || !ContactName) {
+    return res.status(400).json({ error: 'Missing required fields: Email, CompanyName, Industry, or ContactName' });
+  }
+
+  // Construct the data object to be sent to Power Automate
+  const data = {
+    CompanyName, 
+    Industry, 
+    CompanyStage, 
+    ContactName, 
+    Email, 
+    Phone, 
+    InitialCapitalUSD: Number(InitialCapitalUSD), // Convert to number
+    FundingNeedsUSD: Number(FundingNeedsUSD), // Convert to number
+    BusinessRequirements, 
+    BusinessNeeds, 
+    EmployeeCount: Number(EmployeeCount), // Convert to number
+    Founders, 
+    FoundingYear: new Date(FoundingYear).toISOString().split('T')[0], // Convert to YYYY-MM-DD format
+    Address, 
+    City, 
+    Country, 
+    Website, 
+    BusinessPitch, 
+    ProblemStatement, 
+    RegistrationNumber, 
+    EstablishmentDate: new Date(EstablishmentDate).toISOString().split('T')[0], // Convert to YYYY-MM-DD format
+    BusinessSize
+  };
+
+  console.log('Sending data to Power Automate:', data);
   
 //   console.log("data",data)
 //   console.log("my token",data.token)
