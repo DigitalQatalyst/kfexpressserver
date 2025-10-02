@@ -36,7 +36,7 @@ export const getToken = async (req: Request, res: Response): Promise<void> => {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      maxAge: response.data.expires_in * 1000,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     }).status(200).json({
       message: 'Token fetched successfully',
       token: response.data.access_token,
