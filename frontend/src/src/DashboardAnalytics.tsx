@@ -77,7 +77,7 @@ export const DashboardAnalytics: React.FC<DashboardAnalyticsProps> = ({
         {/* Partner Selection Bar */}
         <div className="bg-gray-50 border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-6 py-4">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center gap-3">
               <label htmlFor="partner-select" className="text-sm font-medium text-gray-700">
                 Select Partner:
               </label>
@@ -92,233 +92,233 @@ export const DashboardAnalytics: React.FC<DashboardAnalyticsProps> = ({
             </div>
           </div>
         </div>
-        {/* Sticky Navigation */}
-        <div className="sticky top-16 z-30 bg-white shadow-sm border-b border-slate-200">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="flex h-14 items-center">
-              <nav className="flex items-center gap-2">
-                <button onClick={() => scrollToSection('services', servicesRef)} className={`flex items-center rounded-md px-3 py-2 transition-colors ${activeSection === 'services' ? 'bg-sky-500 text-white' : 'text-gray-600 hover:bg-gray-100'}`}>
-                  <Icon1 className="mr-1.5 w-4 h-4" />
-                  <span className="hidden sm:block">
-                    What Services Do I Have?
-                  </span>
-                  <span className="sm:hidden">Services</span>
-                </button>
-                <button onClick={() => scrollToSection('performance', performanceRef)} className={`flex items-center rounded-md px-3 py-2 transition-colors ${activeSection === 'performance' ? 'bg-sky-500 text-white' : 'text-gray-600 hover:bg-gray-100'}`}>
-                  <Icon2 className="mr-1.5 w-4 h-4" />
-                  <span className="hidden sm:block">
-                    How Are My Services Performing?
-                  </span>
-                  <span className="sm:hidden">Performance</span>
-                </button>
-                <button onClick={() => scrollToSection('users', usersRef)} className={`flex items-center rounded-md px-3 py-2 transition-colors ${activeSection === 'users' ? 'bg-sky-500 text-white' : 'text-gray-600 hover:bg-gray-100'}`}>
-                  <Icon3 className="mr-1.5 w-4 h-4" />
-                  <span className="hidden sm:block">
-                    Who Is Using My Services?
-                  </span>
-                  <span className="sm:hidden">Users</span>
-                </button>
-                <button onClick={() => scrollToSection('feedback', feedbackRef)} className={`flex items-center rounded-md px-3 py-2 transition-colors ${activeSection === 'feedback' ? 'bg-sky-500 text-white' : 'text-gray-600 hover:bg-gray-100'}`}>
-                  <Icon4 className="mr-1.5 w-4 h-4" />
-                  <span className="hidden sm:block">
-                    How Do SMEs Feel About My Services?
-                  </span>
-                  <span className="sm:hidden">Feedback</span>
-                </button>
-              </nav>
-            </div>
-          </div>
-        </div>
-        {/* Main Content */}
-        <main className="max-w-7xl mx-auto px-6 py-8">
-          {/* Services Section */}
-          <section ref={servicesRef} id="services" className="pt-8 scroll-mt-32">
-            <h2 className="text-3xl font-semibold font-serif mb-6">
-              What Services Do I Have?
-            </h2>
-            <p className="max-w-3xl text-lg text-gray-600 mb-8">
-              Overview of your service portfolio, including distribution between
-              financial and non-financial offerings and their usage trends.
-            </p>
-            {/* Stats Cards */}
-            {/* MOCK DATA: Replace with Dataverse query aggregating new_serviceentity records */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-              <div onClick={() => handleMetricClick('total-services')}>
-                <StatCard title="Total Services" value="8" icon={<Icon7 />} momChange="0.0%" yoyChange="+33.3%" yoyIcon={<Icon8 />} isSelected={selectedMetric === 'total-services'} />
-              </div>
-              <div onClick={() => handleMetricClick('financial-services')}>
-                <StatCard title="Financial Services" value="3" icon={<Icon9 />} momChange="0.0%" yoyChange="+50.0%" yoyIcon={<Icon10 />} isSelected={selectedMetric === 'financial-services'} />
-              </div>
-              <div onClick={() => handleMetricClick('non-financial-services')}>
-                <StatCard title="Non-Financial Services" value="5" icon={<Icon11 />} momChange="0.0%" yoyChange="+25.0%" yoyIcon={<Icon12 />} isSelected={selectedMetric === 'non-financial-services'} />
-              </div>
-            </div>
-            {/* Charts Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
-              <div className="lg:col-span-2 [&>*]:mb-0">
-                {/* MOCK DATA: Replace with Dataverse time-series query on new_serviceentity.createdon */}
-                <LineChart data={[{
-                name: 'Apr',
-                financial: 3,
-                nonFinancial: 5,
-                total: 8
-              }, {
-                name: 'May',
-                financial: 3,
-                nonFinancial: 5,
-                total: 8
-              }, {
-                name: 'Jun',
-                financial: 3,
-                nonFinancial: 5,
-                total: 8
-              }, {
-                name: 'Jul',
-                financial: 3,
-                nonFinancial: 6,
-                total: 9
-              }, {
-                name: 'Aug',
-                financial: 3,
-                nonFinancial: 6,
-                total: 9
-              }, {
-                name: 'Sep',
-                financial: 4,
-                nonFinancial: 6,
-                total: 10
-              }]} series={[{
-                dataKey: 'financial',
-                name: 'Financial Services',
-                stroke: '#0EA5E9'
-              }, {
-                dataKey: 'nonFinancial',
-                name: 'Non-Financial Services',
-                stroke: '#14B8A6'
-              }, {
-                dataKey: 'total',
-                name: 'Total Services',
-                stroke: '#94A3B8',
-                strokeDasharray: '5 5'
-              }]} title="Service Growth Trend" description="Trend of newly added sub-services over the last 6 months across financial and non-financial categories." yAxisLabel="Count" height={360} />
-              </div>
-              <div>
-                {/* MOCK DATA: Replace with Dataverse query joining new_serviceentity and new_application */}
-                <ServiceUptakeCard services={[{
-                name: 'Industry Networking Events',
-                applications: 85,
-                percentage: 100
-              }, {
-                name: 'Startup Seed Grant',
-                applications: 68,
-                percentage: 80
-              }, {
-                name: 'Digital Transformation Workshop',
-                applications: 52,
-                percentage: 61
-              }]} />
-                <h3 className="text-xl font-medium mt-8 mb-4">
-                  Latest Added Service
-                </h3>
-                {/* MOCK DATA: Replace with Dataverse query ordering by new_serviceentity.createdon desc, limit 1 */}
-                <div className="bg-blue-50 rounded-lg p-4">
-                  <div className="flex items-start">
-                    <div className="flex-1">
-                      <h4 className="text-lg text-blue-900 font-medium">
-                        Digital Transformation Workshop
-                      </h4>
-                      <p className="text-sm text-blue-700 mt-1">
-                        Added: Aug 2023
-                      </p>
+        {/* Layout with Sidebar */}
+        <div className="flex">
+          {/* Sidebar */}
+          <aside className="fixed left-0 top-16 h-screen w-64 bg-white border-r border-gray-200 overflow-y-auto z-30">
+            <nav className="p-4 space-y-2">
+              <button onClick={() => scrollToSection('services', servicesRef)} className={`w-full flex items-start p-3 rounded-lg transition-colors ${activeSection === 'services' ? 'bg-sky-500 text-white' : 'text-gray-600 hover:bg-gray-100'}`}>
+                <Icon1 className="mr-3 w-5 h-5 mt-0.5 flex-shrink-0" />
+                <div className="text-left">
+                  <div className="font-medium text-sm">Services</div>
+                  <div className="text-xs opacity-75">What Services Do I Have?</div>
+                </div>
+              </button>
+              <button onClick={() => scrollToSection('performance', performanceRef)} className={`w-full flex items-start p-3 rounded-lg transition-colors ${activeSection === 'performance' ? 'bg-sky-500 text-white' : 'text-gray-600 hover:bg-gray-100'}`}>
+                <Icon2 className="mr-3 w-5 h-5 mt-0.5 flex-shrink-0" />
+                <div className="text-left">
+                  <div className="font-medium text-sm">Performance</div>
+                  <div className="text-xs opacity-75">How Are My Services Performing?</div>
+                </div>
+              </button>
+              <button onClick={() => scrollToSection('users', usersRef)} className={`w-full flex items-start p-3 rounded-lg transition-colors ${activeSection === 'users' ? 'bg-sky-500 text-white' : 'text-gray-600 hover:bg-gray-100'}`}>
+                <Icon3 className="mr-3 w-5 h-5 mt-0.5 flex-shrink-0" />
+                <div className="text-left">
+                  <div className="font-medium text-sm">Users</div>
+                  <div className="text-xs opacity-75">Who Is Using My Services?</div>
+                </div>
+              </button>
+              <button onClick={() => scrollToSection('feedback', feedbackRef)} className={`w-full flex items-start p-3 rounded-lg transition-colors ${activeSection === 'feedback' ? 'bg-sky-500 text-white' : 'text-gray-600 hover:bg-gray-100'}`}>
+                <Icon4 className="mr-3 w-5 h-5 mt-0.5 flex-shrink-0" />
+                <div className="text-left">
+                  <div className="font-medium text-sm">Feedback</div>
+                  <div className="text-xs opacity-75">How Do SMEs Feel About My Services?</div>
+                </div>
+              </button>
+            </nav>
+          </aside>
+          {/* Main Content */}
+          <main className="ml-64 flex-1 px-6 py-8">
+            {/* Services Section */}
+            {activeSection === 'services' && (
+              <section ref={servicesRef} id="services" className="pt-8">
+                <h2 className="text-3xl font-semibold font-serif mb-6">
+                  What Services Do I Have?
+                </h2>
+                <p className="max-w-3xl text-lg text-gray-600 mb-8">
+                  Overview of your service portfolio, including distribution between
+                  financial and non-financial offerings and their usage trends.
+                </p>
+                {/* Stats Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                  <div onClick={() => handleMetricClick('total-services')}>
+                    <StatCard title="Total Services" value="8" icon={<Icon7 />} momChange="0.0%" yoyChange="+33.3%" yoyIcon={<Icon8 />} isSelected={selectedMetric === 'total-services'} />
+                  </div>
+                  <div onClick={() => handleMetricClick('financial-services')}>
+                    <StatCard title="Financial Services" value="3" icon={<Icon9 />} momChange="0.0%" yoyChange="+50.0%" yoyIcon={<Icon10 />} isSelected={selectedMetric === 'financial-services'} />
+                  </div>
+                  <div onClick={() => handleMetricClick('non-financial-services')}>
+                    <StatCard title="Non-Financial Services" value="5" icon={<Icon11 />} momChange="0.0%" yoyChange="+25.0%" yoyIcon={<Icon12 />} isSelected={selectedMetric === 'non-financial-services'} />
+                  </div>
+                </div>
+                {/* Charts Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+                  <div className="lg:col-span-2 [&>*]:mb-0">
+                    <LineChart data={[{
+                    name: 'Apr',
+                    financial: 3,
+                    nonFinancial: 5,
+                    total: 8
+                  }, {
+                    name: 'May',
+                    financial: 3,
+                    nonFinancial: 5,
+                    total: 8
+                  }, {
+                    name: 'Jun',
+                    financial: 3,
+                    nonFinancial: 5,
+                    total: 8
+                  }, {
+                    name: 'Jul',
+                    financial: 3,
+                    nonFinancial: 6,
+                    total: 9
+                  }, {
+                    name: 'Aug',
+                    financial: 3,
+                    nonFinancial: 6,
+                    total: 9
+                  }, {
+                    name: 'Sep',
+                    financial: 4,
+                    nonFinancial: 6,
+                    total: 10
+                  }]} series={[{
+                    dataKey: 'financial',
+                    name: 'Financial Services',
+                    stroke: '#0EA5E9'
+                  }, {
+                    dataKey: 'nonFinancial',
+                    name: 'Non-Financial Services',
+                    stroke: '#14B8A6'
+                  }, {
+                    dataKey: 'total',
+                    name: 'Total Services',
+                    stroke: '#94A3B8',
+                    strokeDasharray: '5 5'
+                  }]} title="Service Growth Trend" description="Trend of newly added sub-services over the last 6 months across financial and non-financial categories." yAxisLabel="Count" height={360} />
+                  </div>
+                  <div>
+                    <ServiceUptakeCard services={[{
+                    name: 'Industry Networking Events',
+                    applications: 85,
+                    percentage: 100
+                  }, {
+                    name: 'Startup Seed Grant',
+                    applications: 68,
+                    percentage: 80
+                  }, {
+                    name: 'Digital Transformation Workshop',
+                    applications: 52,
+                    percentage: 61
+                  }]} />
+                    <h3 className="text-xl font-medium mt-8 mb-4">
+                      Latest Added Service
+                    </h3>
+                    <div className="bg-blue-50 rounded-lg p-4">
+                      <div className="flex items-start">
+                        <div className="flex-1">
+                          <h4 className="text-lg text-blue-900 font-medium">
+                            Digital Transformation Workshop
+                          </h4>
+                          <p className="text-sm text-blue-700 mt-1">
+                            Added: Aug 2023
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </section>
-          {/* Performance Section */}
-          <section ref={performanceRef} id="performance" className="mt-16 scroll-mt-32">
-            <h2 className="text-3xl font-semibold font-serif mb-6">
-              How Are My Services Performing?
-            </h2>
-            <p className="max-w-3xl text-lg text-gray-600 mb-8">
-              Analysis of application flow, approval rates, processing times,
-              and overall performance metrics for your services.
-            </p>
-            {/* KPIs and Applications Trend */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-              {/* MOCK DATA: Replace with Dataverse aggregation queries on new_application */}
-              <KPICard />
-              <ApplicationsTrendCard />
-            </div>
-            <InsightsPanel />
-          </section>
-          {/* Users Section */}
-          <section ref={usersRef} id="smeProfile" className="mt-16 scroll-mt-32">
-            <h2 className="text-3xl font-semibold font-serif mb-6">
-              Who Is Using My Services?
-            </h2>
-            <p className="max-w-3xl text-lg text-gray-600 mb-8">
-              Profile of SMEs engaging with your services, including size,
-              sector, stage, and regional distribution.
-            </p>
-            {/* MOCK DATA: Replace with Dataverse queries on account entity with custom fields */}
-            <SMEProfileDashboard />
-            {/* MOCK DATA: Replace with Dataverse query on new_application.new_isfirsttime field */}
-            <UserAnalytics title="First-time vs Repeat Users" data={[{
-            month: 'Apr',
-            firstTime: 45,
-            repeat: 55
-          }, {
-            month: 'May',
-            firstTime: 42,
-            repeat: 58
-          }, {
-            month: 'Jun',
-            firstTime: 40,
-            repeat: 60
-          }, {
-            month: 'Jul',
-            firstTime: 38,
-            repeat: 62
-          }, {
-            month: 'Aug',
-            firstTime: 35,
-            repeat: 65
-          }, {
-            month: 'Sep',
-            firstTime: 32,
-            repeat: 68
-          }]} insights={[{
-            label: 'Repeat User Rate',
-            value: '68%',
-            percentage: 68
-          }, {
-            label: 'Avg. Services Per SME',
-            value: '2.4',
-            percentage: 60
-          }, {
-            label: 'Cross-Service Adoption',
-            value: '42%',
-            percentage: 42
-          }]} footerText="Repeat user rate has increased by 13 percentage points over the last 6 months, indicating growing loyalty and satisfaction." />
-          </section>
-          {/* Feedback Section */}
-          <section ref={feedbackRef} id="feedback" className="mt-16 scroll-mt-32">
-            <h2 className="text-3xl font-semibold font-serif mb-6">
-              How Do SMEs Feel About My Services?
-            </h2>
-            <p className="max-w-3xl text-lg text-gray-600 mb-8">
-              Analysis of customer satisfaction, feedback themes, and detailed
-              reviews from SMEs using your services.
-            </p>
-            {/* MOCK DATA: Replace with Dataverse query on feedback entity */}
-            <CustomerSatisfactionChart overallRating={4.2} improvement={0.3} summaryText="Overall satisfaction has increased by 7.5% over the last 6 months." />
-            {/* MOCK DATA: Replace with Dataverse query on feedback entity with custom sentiment field */}
-            <ReviewsPanel />
-            <FeedbackInsights />
-          </section>
-        </main>
+              </section>
+            )}
+
+            {/* Performance Section */}
+            {activeSection === 'performance' && (
+              <section ref={performanceRef} id="performance" className="pt-8">
+                <h2 className="text-3xl font-semibold font-serif mb-6">
+                  How Are My Services Performing?
+                </h2>
+                <p className="max-w-3xl text-lg text-gray-600 mb-8">
+                  Analysis of application flow, approval rates, processing times,
+                  and overall performance metrics for your services.
+                </p>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                  <KPICard />
+                  <ApplicationsTrendCard />
+                </div>
+                <InsightsPanel />
+              </section>
+            )}
+
+            {/* Users Section */}
+            {activeSection === 'users' && (
+              <section ref={usersRef} id="smeProfile" className="pt-8">
+                <h2 className="text-3xl font-semibold font-serif mb-6">
+                  Who Is Using My Services?
+                </h2>
+                <p className="max-w-3xl text-lg text-gray-600 mb-8">
+                  Profile of SMEs engaging with your services, including size,
+                  sector, stage, and regional distribution.
+                </p>
+                <SMEProfileDashboard />
+                <UserAnalytics title="First-time vs Repeat Users" data={[{
+                month: 'Apr',
+                firstTime: 45,
+                repeat: 55
+              }, {
+                month: 'May',
+                firstTime: 42,
+                repeat: 58
+              }, {
+                month: 'Jun',
+                firstTime: 40,
+                repeat: 60
+              }, {
+                month: 'Jul',
+                firstTime: 38,
+                repeat: 62
+              }, {
+                month: 'Aug',
+                firstTime: 35,
+                repeat: 65
+              }, {
+                month: 'Sep',
+                firstTime: 32,
+                repeat: 68
+              }]} insights={[{
+                label: 'Repeat User Rate',
+                value: '68%',
+                percentage: 68
+              }, {
+                label: 'Avg. Services Per SME',
+                value: '2.4',
+                percentage: 60
+              }, {
+                label: 'Cross-Service Adoption',
+                value: '42%',
+                percentage: 42
+              }]} footerText="Repeat user rate has increased by 13 percentage points over the last 6 months, indicating growing loyalty and satisfaction." />
+              </section>
+            )}
+
+            {/* Feedback Section */}
+            {activeSection === 'feedback' && (
+              <section ref={feedbackRef} id="feedback" className="pt-8">
+                <h2 className="text-3xl font-semibold font-serif mb-6">
+                  How Do SMEs Feel About My Services?
+                </h2>
+                <p className="max-w-3xl text-lg text-gray-600 mb-8">
+                  Analysis of customer satisfaction, feedback themes, and detailed
+                  reviews from SMEs using your services.
+                </p>
+                <CustomerSatisfactionChart overallRating={4.2} improvement={0.3} summaryText="Overall satisfaction has increased by 7.5% over the last 6 months." />
+                <ReviewsPanel />
+                <FeedbackInsights />
+              </section>
+            )}
+          </main>
+        </div>
       </div>
     </main>;
 };
@@ -401,23 +401,23 @@ const TopServicesList = () => {
 const InsightsPanel = () => {
   const insights = [{
     text: '60% conversion rate from start to fulfillment, up 9.1% year-over-year',
-    type: 'positive',
+    type: 'positive' as const,
     icon: <Icon17 />
   }, {
     text: 'Financial services take 2.5x longer to process than non-financial services',
-    type: 'neutral',
+    type: 'neutral' as const,
     icon: <Icon18 />
   }, {
     text: 'Advisory services have highest approval rate at 95%',
-    type: 'positive',
+    type: 'positive' as const,
     icon: <Icon19 />
   }, {
     text: 'Loan applications have lowest approval rate at 72%',
-    type: 'negative',
+    type: 'negative' as const,
     icon: <Icon20 />
   }, {
     text: 'Average time to decision reduced by 32.7% compared to last year',
-    type: 'positive',
+    type: 'positive' as const,
     icon: <Icon21 />
   }];
   return <div className="bg-gradient-to-br from-teal-500 to-sky-500 rounded-lg border border-slate-200 shadow-sm backdrop-blur-xl p-6">
@@ -431,19 +431,19 @@ const InsightsPanel = () => {
 };
 const InsightBadge: React.FC<{
   text: string;
-  type: string;
+  type: 'positive' | 'negative' | 'neutral';
   icon: React.ReactNode;
 }> = ({
   text,
   type,
   icon
 }) => {
-  const bgColors = {
+  const bgColors: Record<string, string> = {
     positive: 'bg-green-50 border-green-200',
     negative: 'bg-red-50 border-red-200',
     neutral: 'bg-blue-50 border-blue-200'
   };
-  const iconColors = {
+  const iconColors: Record<string, string> = {
     positive: 'text-green-600',
     negative: 'text-red-600',
     neutral: 'text-blue-600'
@@ -599,13 +599,13 @@ const DistributionCard: React.FC<{
     label: string;
     value: number;
   }>;
-  color: string;
+  color: 'blue' | 'purple' | 'green' | 'amber';
 }> = ({
   title,
   items,
   color
 }) => {
-  const colorMap = {
+  const colorMap: Record<string, string> = {
     blue: 'bg-blue-600',
     purple: 'bg-purple-600',
     green: 'bg-green-600',
@@ -684,10 +684,10 @@ const MetricBar: React.FC<{
 }) => <div className="mb-4">
     <div className="flex items-center justify-between mb-1 text-sm">
       <span className="font-medium">{label}</span>
-      <span className={`font-bold text-${color}-500`}>{value}%</span>
+      <span className="font-bold text-sky-500">{value}%</span>
     </div>
     <div className="h-2.5 bg-slate-200 rounded-full overflow-hidden">
-      <div className={`h-full bg-${color}-500 rounded-full`} style={{
+      <div className="h-full bg-sky-500 rounded-full" style={{
       width: `${value}%`
     }} />
     </div>
@@ -750,7 +750,7 @@ const ReviewCard: React.FC<{
   date: string;
   service: string;
   text: string;
-  sentiment: string;
+  sentiment: 'positive' | 'neutral' | 'negative';
   icon: React.ReactNode;
   isFirst: boolean;
 }> = ({
@@ -762,7 +762,7 @@ const ReviewCard: React.FC<{
   icon,
   isFirst
 }) => {
-  const sentimentColors = {
+  const sentimentColors: Record<string, string> = {
     positive: 'text-green-600',
     neutral: 'text-blue-600',
     negative: 'text-red-600'
@@ -793,23 +793,23 @@ const FeedbackInsights = () => {
   const insights = [{
     text: 'Non-financial services consistently receive higher satisfaction ratings than financial services',
     icon: <Icon63 />,
-    type: 'neutral'
+    type: 'neutral' as const
   }, {
     text: 'Documentation complexity is the most common negative feedback for financial services',
     icon: <Icon64 />,
-    type: 'negative'
+    type: 'negative' as const
   }, {
     text: 'Advisory services receive the highest praise for staff expertise and knowledge',
     icon: <Icon65 />,
-    type: 'positive'
+    type: 'positive' as const
   }, {
     text: 'SMEs request more post-service follow-up and continued support across all service types',
     icon: <Icon66 />,
-    type: 'neutral'
+    type: 'neutral' as const
   }, {
     text: 'Overall satisfaction has increased by 7.5% in the last 6 months',
     icon: <Icon67 />,
-    type: 'positive'
+    type: 'positive' as const
   }];
   return <div className="mt-10 bg-gradient-to-br from-teal-500 to-sky-500 rounded-lg border border-slate-200 shadow-sm backdrop-blur-xl p-6">
       <h3 className="text-xl font-normal font-serif mb-4">Feedback Insights</h3>
