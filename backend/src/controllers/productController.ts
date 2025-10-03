@@ -1,9 +1,14 @@
 import { Request, Response } from 'express';
-import { fetchAllProducts, fetchProductById } from '../services/productServices';
+import { fetchAllProducts, fetchProductById, fetchProductsByMarketplace } from '../services/productServices';
 
 interface ProductRequestBody {
   token: string;
   productId?: string;
+}
+
+interface MarketplaceRequestBody {
+  token: string;
+  marketplaceType: string;
 }
 
 export const getAllProducts = async (req: Request<{}, {}, ProductRequestBody>, res: Response): Promise<void> => {
@@ -56,6 +61,34 @@ export const getProductById = async (req: Request<{}, {}, ProductRequestBody>, r
     console.error('Error fetching product:', error.response?.data || error.message);
     res.status(error.response?.status || 500).json({
       error: 'Failed to fetch product',
+      details: error.response?.data || error.message
+    });
+  }
+};
+
+export const getProductsByMarketplace = async (req: Request<{}, {}, MarketplaceRequestBody>, res: Response): Promise<void> => {
+  const { token, marketplaceType } = req.body;
+
+  if (!token || !marketplaceType) {
+    res.status(400).json({ error: 'Token and marketplaceType are required' });
+    return;
+  }
+
+  try {
+    const productsData = await fetchProductsByMarketplace(token, marketplaceType);
+
+    res.status(200).json({
+      success: true,
+      message: `${marketplaceType} products fetched successfully`,
+      totalCount: productsData['@odata.count'] || 0,
+      data: productsData.value,
+      timestamp: new Date().toISOString()
+    });
+
+  } catch (error: any) {
+    console.error('Error fetching marketplace products:', error.response?.data || error.message);
+    res.status(error.response?.status || 500).json({
+      error: 'Failed to fetch marketplace products',
       details: error.response?.data || error.message
     });
   }
