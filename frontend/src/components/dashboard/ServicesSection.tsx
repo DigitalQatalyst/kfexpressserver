@@ -61,6 +61,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
   const [uncategorizedCount, setUncategorizedCount] = useState<string>('Loading...');
   const [chartData, setChartData] = useState([]);
   const [topServices, setTopServices] = useState([]);
+  const [latestService, setLatestService] = useState<any>(null);
 
   useEffect(() => {
     const loadServiceCounts = async () => {
@@ -99,6 +100,11 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
           percentage: index === 0 ? 100 : Math.floor((Math.random() * 30) + 60) // First service gets 100%, others 60-90%
         }));
         setTopServices(servicesWithApps);
+        
+        // Set latest service
+        if (products.length > 0) {
+          setLatestService(products[0]);
+        }
       } catch (error) {
         console.error('Failed to load service counts:', error);
         setFinancialCount('Error');
@@ -198,10 +204,10 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
             <div className="flex items-start">
               <div className="flex-1">
                 <h4 className="text-lg text-blue-900 font-medium">
-                  Digital Transformation Workshop
+                  {latestService?.name || 'No services available'}
                 </h4>
                 <p className="text-sm text-blue-700 mt-1">
-                  Added: Aug 2023
+                  Partner: {latestService?.kf_partner || 'N/A'}
                 </p>
               </div>
             </div>
